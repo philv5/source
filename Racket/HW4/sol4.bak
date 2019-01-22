@@ -1,0 +1,22 @@
+#lang racket
+
+(define (dataOf node) (car node))
+(define (leftChildOf node) (cadr node))
+(define (rightChildOf node) (caddr node))
+
+(define (check_bst root)
+  (if (null? root)
+      #t
+      (letrec ([data (dataOf root)]
+            [checkL (lambda(node)
+                      (if (null? node) #t
+                          (> data (dataOf node))))]
+            [checkR (lambda(node)
+                      (if (null? node) #t
+                          (< data (dataOf node))))])
+        (and (checkL (leftChildOf root)) (checkR (rightChildOf root)) (check_bst (leftChildOf root)) (check_bst (rightChildOf root))))))
+
+
+(define (apply func root)
+  (if (null? root) null
+      (list (func (dataOf root)) (apply func (leftChildOf root)) (apply func (rightChildOf root)))))
